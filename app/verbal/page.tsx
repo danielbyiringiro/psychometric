@@ -26,7 +26,7 @@ const questions: Question [] = [
           "To comply with new labor regulations"
         ],
         correctAnswer: 2,
-        timeLimit: 30
+        timeLimit: 60
     },
     {
         text: "The municipal recycling program now requires residents to separate glass from other recyclables. This change addresses contamination issues in single-stream recycling, where broken glass renders 20% of materials unrecyclable. Proper sorting enables more efficient processing at specialized facilities.",
@@ -38,7 +38,7 @@ const questions: Question [] = [
           "Shortage of recycling bins"
         ],
         correctAnswer: 1,
-        timeLimit: 30
+        timeLimit: 60
     },
     {
         text: "While machine learning algorithms now achieve 98% accuracy in medical imaging analysis, they serve as decision-support tools rather than diagnostic replacements. These systems flag potential anomalies for radiologist review, combining computational speed with human clinical judgment.",
@@ -50,7 +50,7 @@ const questions: Question [] = [
           "It's too expensive for widespread use"
         ],
         correctAnswer: 1,
-        timeLimit: 30
+        timeLimit: 60
     },
     {
         text: "Demand-pull inflation occurs when consumer demand outstrips production capacity, causing price increases. This contrasts with cost-push inflation driven by rising production expenses. Central banks often respond to demand-pull scenarios with interest rate hikes to reduce spending.",
@@ -62,7 +62,7 @@ const questions: Question [] = [
           "Production capacity limitations"
         ],
         correctAnswer: 2,
-        timeLimit: 30
+        timeLimit: 60
     },
     {
         text: "The Industrial Revolution's factory system concentrated production in urban areas, creating unprecedented migration from rural communities. This urbanization led to overcrowded cities but also fostered new social structures and labor organizations advocating workers' rights.",
@@ -74,7 +74,7 @@ const questions: Question [] = [
           "Labor unions immediately gained political power"
         ],
         correctAnswer: 2,
-        timeLimit: 30
+        timeLimit: 60
     }
 ] 
 

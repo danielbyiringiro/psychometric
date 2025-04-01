@@ -23,7 +23,7 @@ const questions: Question[] = [
       question: "What was the percentage increase in Q4 sales from 2021 to 2023?",
       options: ["29%", "37%", "43%", "51%"],
       correctAnswer: 1,
-      timeLimit: 45,
+      timeLimit: 120,
       chartData: {
         labels: ['2021', '2022', '2023'],
         datasets: [{
@@ -43,7 +43,7 @@ const questions: Question[] = [
         question: "In which month was the profit margin highest?",
         options: ["January", "March", "June", "August"],
         correctAnswer: 1,
-        timeLimit: 110,
+        timeLimit: 120,
         chartData: {
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
           datasets: [
@@ -88,7 +88,7 @@ const questions: Question[] = [
       question: "What is the ratio of the largest market segment to the smallest?",
       options: ["3:1", "19:5", "5:2", "4:1"],
       correctAnswer: 1,
-      timeLimit: 30,
+      timeLimit: 120,
       chartData: {
         labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'],
         datasets: [{
@@ -108,7 +108,7 @@ const questions: Question[] = [
       question: "What is the average annual growth rate across all years?",
       options: ["9%", "10%", "11%", "12%"],
       correctAnswer: 1,
-      timeLimit: 30,
+      timeLimit: 120,
       chartData: {
         labels: ['Year 1', 'Year 2', 'Year 3'],
         datasets: [{
@@ -128,7 +128,7 @@ const questions: Question[] = [
       question: "Which quarter had the lowest cost per conversion?",
       options: ["Q1", "Q2", "Q3", "Q4"],
       correctAnswer: 3,
-      timeLimit: 100,
+      timeLimit: 120,
       chartData: {
         labels: ['Q1', 'Q2', 'Q3', 'Q4'],
         datasets: [
