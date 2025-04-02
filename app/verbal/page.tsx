@@ -1,8 +1,4 @@
-"use client"
-
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import VerbalTest from "./verbalTest";
 
 interface Question 
 {
@@ -13,9 +9,9 @@ interface Question
     timeLimit: number;
 }
 
-type Answer = number;
+const numQuestions = 5;
 
-const questions: Question [] = [
+const questionsDatabase: Question [] = [
     {
         text: "Our company recently transitioned to a hybrid work model, requiring employees to work onsite three days weekly. This decision followed a six-month study showing collaborative tasks benefit from face-to-face interaction, while focused work can be done remotely. The policy aims to balance productivity with employee flexibility.",
         question: "What is the primary reason given for implementing the hybrid model?",
@@ -75,173 +71,140 @@ const questions: Question [] = [
         ],
         correctAnswer: 2,
         timeLimit: 60
+    },
+    {
+      text: "A 2023 climate policy introduced tax credits for solar panel installations, resulting in a 40% adoption increase in metropolitan areas. This incentivization strategy aims to accelerate the transition from fossil fuels while reducing household energy costs.",
+      question: "What is the primary goal of the tax credit policy?",
+      options: [
+          "To increase municipal tax revenue",
+          "To reduce reliance on non-renewable energy",
+          "To fund new power plant construction",
+          "To create solar panel manufacturing jobs"
+      ],
+      correctAnswer: 1,
+      timeLimit: 60
+    },
+    {
+      text: "Educational research indicates students in hybrid learning programs (50% in-person, 50% remote) demonstrate 15% better retention than fully remote counterparts. However, this benefit only appears in learners with strong self-regulation skills.",
+      question: "What key qualification is noted about the study results?",
+      options: [
+          "Applies only to STEM subjects",
+          "Depends on technological access",
+          "Correlates with student motivation",
+          "Requires parental supervision"
+      ],
+      correctAnswer: 2,
+      timeLimit: 60
+    },
+    {
+      text: "Blockchain technology adoption in supply chain management has reduced counterfeit goods by 32% in pilot programs. The immutable transaction records help verify authentic product journeys from manufacturer to retailer.",
+      question: "What is the key advantage of blockchain mentioned?",
+      options: [
+          "Faster shipping times",
+          "Enhanced product traceability",
+          "Lower implementation costs",
+          "Reduced packaging waste"
+      ],
+      correctAnswer: 1,
+      timeLimit: 60
+    },
+    {
+      text: "Recent psychological studies found a correlation between social media usage exceeding 3 hours daily and increased anxiety levels in adolescents. However, researchers caution that correlation does not imply causation.",
+      question: "What conclusion is supported by the text?",
+      options: [
+          "Social media causes clinical anxiety",
+          "Teens should completely avoid digital platforms",
+          "Screen time directly predicts mental health",
+          "Observed relationship requires further investigation"
+      ],
+      correctAnswer: 3,
+      timeLimit: 60
+    },
+    {
+      text: "The French Revolution's economic triggers included regressive tax systems burdening the Third Estate and widespread crop failures. Political philosophers argue these conditions created fertile ground for systemic change.",
+      question: "Which factor is NOT mentioned as contributing to the Revolution?",
+      options: [
+          "Unequal taxation",
+          "Agricultural crises",
+          "Military overspending",
+          "Social class tensions"
+      ],
+      correctAnswer: 2,
+      timeLimit: 60
+    },
+    {
+      text: "Bilingual education programs show participants develop enhanced executive functioning, particularly in task-switching and conflict resolution. These cognitive benefits persist even when second language proficiency remains intermediate.",
+      question: "What is the main argument about bilingual education?",
+      options: [
+          "Requires full fluency for benefits",
+          "Primarily improves cultural awareness",
+          "Enhances specific cognitive skills",
+          "Delays native language development"
+      ],
+      correctAnswer: 2,
+      timeLimit: 60
+    },
+    {
+      text: "GDPR regulations mandate that companies collecting EU citizen data must obtain explicit consent through clear, accessible opt-in mechanisms. Non-compliance penalties can reach 4% of global revenue.",
+      question: "What is the key requirement under GDPR?",
+      options: [
+          "Data encryption standards",
+          "User consent transparency",
+          "Annual security audits",
+          "Data localization within EU"
+      ],
+      correctAnswer: 1,
+      timeLimit: 60
+    },
+    {
+      text: "Darwin's theory of natural selection proposes that organisms with advantageous traits have higher survival and reproduction rates. Over generations, these traits become more common in populations.",
+      question: "What is the central mechanism described?",
+      options: [
+          "Intentional adaptation to environment",
+          "Random genetic mutations",
+          "Differential reproductive success",
+          "Interspecies competition"
+      ],
+      correctAnswer: 2,
+      timeLimit: 60
+    },
+    {
+      text: "Sleep deprivation studies reveal that adults getting ≤5 hours nightly show 30% slower cognitive processing and impaired memory consolidation. These effects mirror moderate alcohol intoxication levels.",
+      question: "What is the main finding about sleep deprivation?",
+      options: [
+          "Causes permanent brain damage",
+          "Reduces life expectancy",
+          "Affects mental performance",
+          "Leads to weight gain"
+      ],
+      correctAnswer: 2,
+      timeLimit: 60
+    },
+    {
+      text: "Metropolitan areas with expanded metro systems report 22% fewer private vehicle commutes. Urban planners attribute this shift to improved reliability and real-time tracking features in modern transit apps.",
+      question: "What outcome is associated with improved public transit?",
+      options: [
+          "Increased road maintenance costs",
+          "Reduced car dependency",
+          "Higher air pollution levels",
+          "Decreased ride-sharing usage"
+      ],
+      correctAnswer: 1,
+      timeLimit: 60
     }
 ] 
 
-export default function VerbalTest() 
+function getRandomQuestions(database: Question [], count: number) : Question []
 {
-    const router = useRouter();
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(questions[currentQuestion].timeLimit);
-    const [answers, setAnswers] = useState<number[]>([]);
-    const [showResults, setShowResults] = useState(false);
+  const shuffled = [...database].sort(() => 0.5 - Math.random())
+  return shuffled.slice(0, count)
+}
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-        setTimeLeft(prev => prev > 0 ? prev - 1 : 0);
-        }, 1000);
+const questions : Question [] = getRandomQuestions(questionsDatabase, numQuestions)
 
-        return () => clearInterval(timer);
-    }, [currentQuestion]);
-
-    useEffect(() => {
-        if (timeLeft === 0) handleNextQuestion();
-    }, [timeLeft]);
-
-
-    const handleAnswer = (answer: Answer) => {
-        setAnswers([...answers, answer]);
-        handleNextQuestion();
-    };
-
-    const calculateScore = () => {
-        return answers.reduce((acc, answer, index) => {
-            return acc + (answer === questions[index].correctAnswer ? 1 : 0);
-        }, 0);
-        };
-    
-    const getResultMessage = (score: number) => {
-    const percentage = (score / questions.length) * 100;
-    if (percentage >= 90) return { message: "Outstanding! 🎉", color: "bg-gradient-to-r from-green-400 to-blue-500" };
-    if (percentage >= 70) return { message: "Well Done! 👍", color: "bg-gradient-to-r from-yellow-400 to-orange-500" };
-    return { message: "Keep Practicing! 💪", color: "bg-gradient-to-r from-red-400 to-pink-500" };
-    };
-
-    const handleNextQuestion = () => {
-        if (currentQuestion < questions.length - 1) 
-        {
-            setCurrentQuestion(prev => prev + 1);
-            setTimeLeft(questions[currentQuestion + 1].timeLimit);
-        } 
-        else 
-        {
-            setShowResults(true);
-        }
-    };
-
-    const getAnswerAnalysis = () => {
-        return questions.map((question, index) => ({
-          questionNumber: index + 1,
-          correct: answers[index] === question.correctAnswer,
-          userAnswer: question.options[answers[index]],
-          correctAnswer: question.options[question.correctAnswer]
-        }));
-      };
-
+export default function Verbal()
+{
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 relative">
-        <div className="absolute top-2 right-2 bg-red-500 text-white px-4 py-2 rounded-full">
-          Time left: {timeLeft} seconds
-        </div>
-
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Passage</h3>
-          <p className="text-gray-600 leading-relaxed">
-            {questions[currentQuestion].text}
-          </p>
-        </div>
-
-        <div className="border-t pt-6">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Question</h3>
-          <p className="text-gray-800 mb-6">
-            {questions[currentQuestion].question}
-          </p>
-
-          <div className="space-y-4">
-            {questions[currentQuestion].options.map((option: string, i: number) => (
-              <button
-                key={i}
-                onClick={() => handleAnswer(i)}
-                className="w-full p-4 text-left bg-gray-50 hover:bg-blue-50 border border-gray-200 rounded-lg transition-colors"
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-      {showResults && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto"
-        >
-          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full shadow-xl my-8 relative max-h-[90vh] overflow-y-auto">
-            <div className={`text-center p-8 rounded-xl ${getResultMessage(calculateScore()).color} text-white`}>
-              <h2 className="text-4xl font-bold mb-4">{getResultMessage(calculateScore()).message}</h2>
-              <div className="flex justify-center items-center space-x-4">
-                <div className="relative w-32 h-32">
-                  <svg className="w-full h-full" viewBox="0 0 100 100">
-                    <circle
-                      className="text-gray-200"
-                      strokeWidth="8"
-                      stroke="currentColor"
-                      fill="transparent"
-                      r="40"
-                      cx="50"
-                      cy="50"
-                    />
-                    <circle
-                      className="text-green-500"
-                      strokeWidth="8"
-                      strokeDasharray={`${(calculateScore() / questions.length) * 251} 251`}
-                      strokeLinecap="round"
-                      stroke="currentColor"
-                      fill="transparent"
-                      r="40"
-                      cx="50"
-                      cy="50"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold">{calculateScore()}/{questions.length}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 space-y-6">
-              <h3 className="text-xl font-semibold">Detailed Analysis</h3>
-              {getAnswerAnalysis().map((analysis, index) => (
-                <div key={index} className="p-4 rounded-lg border border-gray-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium">Question {analysis.questionNumber}</span>
-                    {analysis.correct ? (
-                      <span className="text-green-500">✓ Correct</span>
-                    ) : (
-                      <span className="text-red-500">✗ Incorrect</span>
-                    )}
-                  </div>
-                  <p className="text-sm text-gray-600">Your answer: {analysis.userAnswer}</p>
-                  {!analysis.correct && (
-                    <p className="text-sm text-gray-600">Correct answer: {analysis.correctAnswer}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 flex justify-end">
-              <button
-                onClick={() => router.push('/numerical')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors"
-              >
-                Continue to Next Section →
-              </button>
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </div>
-  );
+    <VerbalTest questions={questions} />
+  )
 }
