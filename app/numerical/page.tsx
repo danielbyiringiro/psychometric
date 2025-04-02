@@ -2,11 +2,33 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement } from 'chart.js';
+import { 
+  Chart as ChartJS, 
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  Title, 
+  Tooltip, 
+  Legend, 
+  LineController,
+  PointElement, 
+  LineElement, 
+} from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartDataLabels, PointElement, LineElement);
+ChartJS.register(
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  Title, 
+  Tooltip, 
+  Legend, 
+  ChartDataLabels, 
+  LineController,
+  PointElement, 
+  LineElement
+);
 
 interface Question {
   text: string;
