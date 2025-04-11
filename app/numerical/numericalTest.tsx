@@ -3,33 +3,35 @@
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Bar } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
-
 import { 
-    Chart as ChartJS, 
-    CategoryScale, 
-    LinearScale, 
-    BarElement, 
-    Title, 
-    Tooltip, 
-    Legend, 
-    LineController,
-    PointElement, 
-    LineElement, 
-  } from 'chart.js';
-  
+  Chart as ChartJS, 
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  Title, 
+  Tooltip, 
+  Legend, 
+  LineController,
+  PointElement, 
+  LineElement,
+  ArcElement,
+} from 'chart.js';
+import { Bar, Line, Pie, Doughnut } from 'react-chartjs-2';
+
+// Register ChartJS components
 ChartJS.register(
-    CategoryScale, 
-    LinearScale, 
-    BarElement, 
-    Title, 
-    Tooltip, 
-    Legend, 
-    ChartDataLabels, 
-    LineController,
-    PointElement, 
-    LineElement
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  Title, 
+  Tooltip, 
+  Legend, 
+  ChartDataLabels, 
+  LineController,
+  PointElement, 
+  LineElement,
+  ArcElement
 );
 
 interface Question 
@@ -41,6 +43,24 @@ interface Question
     timeLimit: number;
     chartData: any;
 }
+
+// Chart component to handle different chart types
+const ChartComponent = ({ chartData }: { chartData: any }) => {
+  const { type, data, options } = chartData;
+  
+  switch (type) {
+    case 'line':
+      return <Line data={data} options={options} />;
+    case 'bar':
+      return <Bar data={data} options={options} />;
+    case 'pie':
+      return <Pie data={data} options={options} />;
+    case 'doughnut':
+      return <Doughnut data={data} options={options} />;
+    default:
+      return <Bar data={data} options={options} />;
+  }
+};
 
 export default function NumericalTest({questions}: {questions: Question[]}) {
     const router = useRouter();
@@ -94,20 +114,9 @@ export default function NumericalTest({questions}: {questions: Question[]}) {
         correct: answers[index] === question.correctAnswer,
         userAnswer: question.options[answers[index]],
         correctAnswer: question.options[question.correctAnswer],
-        explanation: getExplanation(question, index)
       }));
     };
   
-    const getExplanation = (question: Question, index: number) => {
-      switch(index) {
-        case 0: return `Calculation: ((5.2 - 3.8) / 3.8) * 100 = 36.8% ≈ 37%`;
-        case 1: return `March profit margin: ((88-45)/88)*100 ≈ 48.86%`;
-        case 2: return `Ratio calculation: 38% (largest) : 12% (smallest) = 19:6`;
-        case 3: return `Average growth: (8 + 12 + 10) / 3 = 10%`;
-        case 4: return `Q4 cost per conversion: 28,000€ / 260 = 107.69€`;
-        default: return '';
-      }
-    };
   
     return (
       <div className="min-h-screen bg-gray-100 p-8">
@@ -119,36 +128,7 @@ export default function NumericalTest({questions}: {questions: Question[]}) {
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-700 mb-4">Data Visualization</h3>
             <div className="w-full h-64">
-              <Bar
-                data={questions[currentQuestion].chartData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: { position: 'top' },
-                    title: { display: true, text: questions[currentQuestion].text },
-                    datalabels: {
-                      display: true,
-                      color: '#374151',
-                      font: {
-                        weight: 'bold',
-                        size: 12
-                      },
-                      padding: 6,
-                      textAlign: 'center',
-                      textShadowColor: 'white',
-                      textStrokeColor: 'white',
-                      textStrokeWidth: 2
-                    }
-                  },
-                  scales: {
-                    y: {
-                      display: true,
-                      beginAtZero: true
-                    }
-                  }
-                }}
-              />
+              <ChartComponent chartData={questions[currentQuestion].chartData} />
             </div>
           </div>
   
@@ -228,7 +208,6 @@ export default function NumericalTest({questions}: {questions: Question[]}) {
                     {!analysis.correct && (
                       <>
                         <p className="text-sm text-gray-600">Correct answer: {analysis.correctAnswer}</p>
-                        <p className="text-sm text-gray-500 mt-2 italic">{analysis.explanation}</p>
                       </>
                     )}
                   </div>
@@ -237,10 +216,10 @@ export default function NumericalTest({questions}: {questions: Question[]}) {
   
               <div className="mt-8 flex justify-end">
                 <button
-                  onClick={() => router.push('/')}
+                  onClick={() => router.push('/abstract')}
                   className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors"
                 >
-                  Done
+                  Continue to Next Section →
                 </button>
               </div>
             </div>

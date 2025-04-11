@@ -1,5 +1,29 @@
-import { label } from "framer-motion/client";
 import NumericalTest from "./numericalTest";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface Question {
   text: string;
@@ -10,327 +34,224 @@ interface Question {
   chartData: any;
 }
 
-const numQuestions: number = 5;
-
 const questionsDatabase: Question[] = [
-    {
-      text: "Sales Performance Comparison",
-      question: "What was the percentage increase in Q4 sales from 2021 to 2023?",
-      options: ["29%", "37%", "43%", "51%"],
-      correctAnswer: 1,
-      timeLimit: 120,
-      chartData: {
-        labels: ['2021', '2022', '2023'],
+  {
+    text: "Sales Data Analysis",
+    question: "Based on the chart, what was the percentage increase in sales from Q1 to Q2?",
+    options: ["15%", "20%", "25%", "30%"],
+    correctAnswer: 2,
+    timeLimit: 90,
+    chartData: {
+      type: 'bar',
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
         datasets: [{
-          label: 'Q4 Sales (million €)',
-          data: [3.8, 4.5, 5.2],
-          backgroundColor: '#3b82f6',
-          datalabels: {
-            anchor: 'end',
-            align: 'top'
-          }
+          label: 'Sales (in $1000)',
+          data: [40, 50, 35, 60],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
         }]
-      }
-    },
-    {
-        text: "Monthly Revenue vs Expenses",
-        question: "In which month was the profit margin highest?",
-        options: ["January", "March", "June", "August"],
-        correctAnswer: 1,
-        timeLimit: 120,
-        chartData: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [
-            {
-              label: 'Revenue (k€)',
-              data: [75, 82, 88, 79, 85, 90],
-              borderColor: '#10b981',
-              type: 'line',
-              datalabels: {
-                anchor: 'center',
-                align: 'bottom',
-                offset: 8,
-                color: '#10b981',
-                font: {
-                  weight: 'bold',
-                  size: 12
-                }
-              }
-            },
-            {
-              label: 'Expenses (k€)',
-              type: 'bar',
-              data: [48, 52, 45, 55, 60, 58],
-              backgroundColor: '#f59e0b',
-              datalabels: {
-                anchor: 'end',
-                align: 'top',
-                offset: -10,
-                color: '#7c2d12',
-                font: {
-                  weight: 'bold',
-                  size: 12
-                }
-              }
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Revenue ($1000)'
             }
-          ]
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Quarter'
+            }
+          }
         }
-      },      
-    {
-      text: "Market Share Distribution",
-      question: "What is the ratio of the largest market segment to the smallest?",
-      options: ["3:1", "19:5", "5:2", "4:1"],
-      correctAnswer: 1,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'],
-        datasets: [{
-          label: 'Market Share %',
-          data: [22, 18, 38, 10, 12],
-          backgroundColor: ['#ef4444', '#f59e0b', '#84cc16', '#3b82f6', '#8b5cf6'],
-          datalabels: {
-            anchor: 'end',
-            align: 'top'
-          }
-        }]
-      }
-    },
-    {
-      text: "Projected Growth Rates",
-      question: "What is the average annual growth rate across all years?",
-      options: ["9%", "10%", "11%", "12%"],
-      correctAnswer: 1,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Year 1', 'Year 2', 'Year 3'],
-        datasets: [{
-          label: 'Growth Rate %',
-          data: [8, 12, 10],
-          backgroundColor: '#8b5cf6',
-          datalabels: {
-            anchor: 'end',
-            align: 'top'
-          }
-        }]
-      }
-    },
-    {
-      text: "Advertising Cost Analysis",
-      question: "Which quarter had the lowest cost per conversion?",
-      options: ["Q1", "Q2", "Q3", "Q4"],
-      correctAnswer: 3,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-        datasets: [
-          {
-            label: 'Ad Spend (€)',
-            data: [18000, 22000, 24500, 28000],
-            backgroundColor: '#3b82f6',
-            datalabels: {
-              anchor: 'end',
-              align: 'top'
-            }
-          },
-          {
-            label: 'Conversions',
-            data: [150, 180, 210, 260],
-            backgroundColor: '#10b981',
-            datalabels: {
-              anchor: 'end',
-              align: 'top'
-            }
-          }
-        ]
-      }
-    },
-    {
-      text: "Customer Satisfaction Trends",
-      question: "Which quarter showed the highest year-over-year improvement in satisfaction?",
-      options: ["Q2 2022", "Q3 2022", "Q1 2023", "Q2 2023"],
-      correctAnswer: 2,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-        datasets: [
-          {
-            label: '2022',
-            data: [78, 82, 85, 84],
-            borderColor: '#3b82f6',
-            type: 'line'
-          },
-          {
-            label: '2023',
-            data: [83, 87, 89, 88],
-            borderColor: '#10b981',
-            type: 'line'
-          }
-        ]
-      }
-    },
-    {
-      text: "Product Launch Performance",
-      question: "What percentage of total sales came from Product B in its launch quarter?",
-      options: ["18%", "22%", "25%", "28%"],
-      correctAnswer: 1,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Product A', 'Product B', 'Product C'],
-        datasets: [{
-          label: 'Total Sales',
-          data: [120000, 85000, 95000],
-          backgroundColor: ['#3b82f6', '#f59e0b', '#84cc16']
-        }]
-      }
-    },
-    {
-      text: "Employee Productivity Metrics",
-      question: "How many more tasks did Team A complete compared to Team B in Week 3?",
-      options: ["15", "20", "25", "30"],
-      correctAnswer: 0,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        datasets: [
-          {
-            label: 'Team A',
-            data: [45, 52, 60, 58],
-            backgroundColor: '#3b82f6'
-          },
-          {
-            label: 'Team B',
-            data: [40, 48, 45, 50],
-            backgroundColor: '#f59e0b'
-          }
-        ]
-      }
-    },
-    {
-      text: "Website Traffic Sources",
-      question: "What is the approximate ratio of organic to paid traffic?",
-      options: ["2:1", "3:1", "4:1", "5:1"],
-      correctAnswer: 1,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Direct', 'Organic', 'Paid', 'Social', 'Email'],
-        datasets: [{
-          label: 'Web Traffic',
-          data: [15, 45, 15, 10, 15],
-          backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899']
-        }]
-      }
-    },
-    {
-      text: "Regional Sales Distribution",
-      question: "Which region accounted for about one-third of total sales?",
-      options: ["North", "South", "East", "West"],
-      correctAnswer: 3,
-      timeLimit: 120,
-      chartData: {
-        labels: ['North', 'South', 'East', 'West'],
-        datasets: [{
-          label: "Total Sales",
-          data: [25, 20, 25, 30],
-          backgroundColor: ['#3b82f6', '#f59e0b', '#84cc16', '#8b5cf6']
-        }]
-      }
-    },
-    {
-      text: "Annual Subscription Growth",
-      question: "What was the percentage growth in subscriptions from 2020 to 2022?",
-      options: ["120%", "140%", "160%", "180%"],
-      correctAnswer: 2,
-      timeLimit: 120,
-      chartData: {
-        labels: ['2020', '2021', '2022'],
-        datasets: [{
-          label: 'Subscriptions (thousands)',
-          data: [25, 45, 65],
-          backgroundColor: '#3b82f6'
-        }]
-      }
-    },
-    {
-      text: "Inventory Turnover Rates",
-      question: "Which product category has the fastest inventory turnover?",
-      options: ["Electronics", "Apparel", "Home Goods", "Grocery"],
-      correctAnswer: 3,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Electronics', 'Apparel', 'Home Goods', 'Grocery'],
-        datasets: [{
-          label: 'Turnover (times/year)',
-          data: [4, 6, 5, 12],
-          backgroundColor: ['#3b82f6', '#f59e0b', '#84cc16', '#10b981']
-        }]
-      }
-    },
-    {
-      text: "Project Timeline Comparison",
-      question: "How many days was Project A ahead of schedule at completion?",
-      options: ["5", "7", "10", "12"],
-      correctAnswer: 1,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Planned', 'Actual'],
-        datasets: [
-          {
-            label: 'Project A',
-            data: [90, 83],
-            backgroundColor: '#3b82f6'
-          },
-          {
-            label: 'Project B',
-            data: [75, 80],
-            backgroundColor: '#f59e0b'
-          }
-        ]
-      }
-    },
-    {
-      text: "Energy Consumption Breakdown",
-      question: "What percentage of total energy is consumed by cooling systems?",
-      options: ["22%", "25%", "28%", "32%"],
-      correctAnswer: 0,
-      timeLimit: 120,
-      chartData: {
-        labels: ['Lighting', 'HVAC', 'Cooling', 'Equipment', 'Other'],
-        datasets: [{
-          label: "Total Energy",
-          data: [25, 30, 22, 15, 8],
-          backgroundColor: ['#3b82f6', '#f59e0b', '#84cc16', '#8b5cf6', '#ec4899']
-        }]
-      }
-    },
-    {
-      text: "Customer Age Demographics",
-      question: "Which age group represents approximately 40% of customers?",
-      options: ["18-25", "26-35", "36-45", "46-55"],
-      correctAnswer: 2,
-      timeLimit: 120,
-      chartData: {
-        labels: ['18-25', '26-35', '36-45', '46-55', '56+'],
-        datasets: [{
-          label: "Age Group",
-          data: [15, 30, 40, 10, 5],
-          backgroundColor: ['#3b82f6', '#f59e0b', '#84cc16', '#8b5cf6', '#ec4899']
-        }]
       }
     }
-  ];
+  },
+  {
+    text: "Population Growth Trends",
+    question: "What is the average annual population growth over the 5-year period?",
+    options: ["1.2 million", "1.5 million", "1.8 million", "2.1 million"],
+    correctAnswer: 1,
+    timeLimit: 120,
+    chartData: {
+      type: 'line',
+      data: {
+        labels: ['2019', '2020', '2021', '2022', '2023'],
+        datasets: [{
+          label: 'Population (millions)',
+          data: [10.2, 11.6, 13.2, 14.8, 16.2],
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Population (millions)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    text: "Expense Distribution",
+    question: "What percentage of the total expenses is spent on Housing?",
+    options: ["20%", "30%", "35%", "40%"],
+    correctAnswer: 3,
+    timeLimit: 60,
+    chartData: {
+      type: 'pie',
+      data: {
+        labels: ['Housing', 'Food', 'Transportation', 'Entertainment', 'Utilities'],
+        datasets: [{
+          label: 'Monthly Expenses',
+          data: [40, 25, 15, 10, 10],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Monthly Expense Distribution'
+          }
+        }
+      }
+    }
+  },
+  {
+    text: "Investment Returns",
+    question: "If you invested $5000 in Year 1, what would be the value of your investment in Year 5?",
+    options: ["$6,802", "$7,442", "$8,144", "$9,155"],
+    correctAnswer: 2,
+    timeLimit: 120,
+    chartData: {
+      type: 'line',
+      data: {
+        labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+        datasets: [{
+          label: 'Annual Return Rate (%)',
+          data: [8, 12, 10, 15, 7],
+          fill: false,
+          borderColor: 'rgb(255, 159, 64)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Return Rate (%)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Year'
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    text: "Comparative Market Analysis",
+    question: "Which company showed the highest revenue growth from 2021 to 2022?",
+    options: ["Company A", "Company B", "Company C", "Company D"],
+    correctAnswer: 1,
+    timeLimit: 90,
+    chartData: {
+      type: 'bar',
+      data: {
+        labels: ['Company A', 'Company B', 'Company C', 'Company D'],
+        datasets: [
+          {
+            label: '2021 Revenue ($ million)',
+            data: [45, 30, 60, 25],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          },
+          {
+            label: '2022 Revenue ($ million)',
+            data: [52, 48, 65, 30],
+            backgroundColor: 'rgba(153, 102, 255, 0.6)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Revenue ($ million)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Company'
+            }
+          }
+        }
+      }
+    }
+  }
+];
 
-function getRandomQuestions(database: Question [], count: number) : Question []
-{
-  const shuffled = [...database].sort(() => 0.5 - Math.random())
-  return shuffled.slice(0, count)
+const numQuestions = 5;
+
+function getRandomQuestions(database: Question[], count: number): Question[] {
+  const shuffled = [...database].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
 }
-  
-const questions : Question [] = getRandomQuestions(questionsDatabase, numQuestions)
 
-export default function Numerical()
-{
-  return(
+const questions: Question[] = getRandomQuestions(questionsDatabase, numQuestions);
+
+export default function Numerical() {
+  return (
     <NumericalTest questions={questions} />
-  )
+  );
 }
 
